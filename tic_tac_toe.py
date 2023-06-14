@@ -15,28 +15,24 @@ Before the game can begin, I need to know who will be playing
 '''
 print(welcome)
 
+
 # --Variables--
 # create global variables
-
-# new_dict is used to reset dict when you start a new game
-new_dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
-new_dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
 # dict is the dict that is used during the game
 dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
 dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
 # input dict converts the space number to its corresponding place in dict
 input_dict = {1:'a', 2:'b', 3:'c', 4:'d', 5:'e', 6:'f', 7:'g', 8:'h', 9:'i'}
-# allow variables are used to compare-- these are the allowed values the input will be checked against
+# allow variables are used to compare -- these are the allowed values the input will be checked against
 allow_num = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 allow_yes_no = ['yes', 'y', 'no', 'n']
 allow_x_o = ['x', 'o']
 # combos for winning
 win_combo = [['a','b','c'], ['d','e','f'], ['g','h','i'], ['a','d','g'], ['b','e','h'], ['c','f','i'], ['a','e','i'], ['c','e','g']]
-
-# create variables to keep track of player scores
+# create variables to keep track of player scores for all games played
 player1_total = 0
 player2_total = 0
-
+# input legend to show what numbers are used to make a move in a specific square
 board_key = '''
 *************************************************
 Input Legend:
@@ -56,32 +52,13 @@ _____|_____|_____
 
 
 # --Functions--
-# create function to print game board -- also updates board with new values
-def print_board():
-    board = '''
-     |     |
- {a}   |  {b}  |  {c}
-_____|_____|_____
-     |     |
- {d}   |  {e}  |  {f}
-_____|_____|_____
-     |     |
- {g}   |  {h}  |  {i}
-     |     |
-'''.format(**dict)
-    print(board)
-
-
-
 # create function to create a player -- using player input
 def create_player(num):
     name = input('''Player {num}:
     -What is your name? '''.format(num = num))
     name = name.title()
-    print(' Nice to meet you {name}\n'.format(name = name))
+    print('\nNice to meet you {name}\n'.format(name = name))
     return name
-
-
 
 
 # --Classes--
@@ -98,15 +75,13 @@ class Player():
     def make_move(self):
         choice = input('{player}, pick a number: '.format(player = self.name))
         choice = int(self.check_num(choice))
-        while (dict_num[choice] == ' ') != True:
+        while (game.dict_num[choice] == ' ') != True:
             choice = input('That space has already been played. Please try again: ')
-            choice = int(choice)
-        dict_num[choice] = self.symbol
+            choice = int(self.check_num(choice))
+        game.dict_num[choice] = self.symbol
         key = input_dict[choice]
         self.moves.append(key)
-        print(self.moves)
-        dict[key] = self.symbol
-        print_board()
+        game.dict[key] = self.symbol
 
     def pick_symbol(self):
         choice = input("{player}, would you like to be 'X' or 'O'? ".format(player = self.name))
@@ -129,8 +104,6 @@ class Player():
                 if move in win_combo[i]:
                     x += 1
                     if x == 3:
-                        # print('win')
-                        # self.total += 1
                         return True
             i += 1
         return False
@@ -150,9 +123,6 @@ class Player():
         return choice
 
 
-
-
-
 # create class --Game--
 class Game():
 
@@ -160,7 +130,10 @@ class Game():
         self.players = player1.name, player2.name
         self.player_obj = []
         self.start_player = ''
+        self.dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
+        self.dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
 
+    # create a function to determine random play order and allow player going 2nd to pick their symbol
     def play_order(self):
         order = random.randint(1,2)
         if order == 1:
@@ -171,7 +144,6 @@ class Game():
             self.player_obj.append(player2)
             print('{player}, you have been randomly selected to go first.\n'.format(player = player1.name))
             player2.pick_symbol()
-
         else:
             player1.player = 2
             self.start_player = player2
@@ -181,39 +153,124 @@ class Game():
             print('{player}, you have been randomly selected to go first.\n'.format(player = player2.name))
             player1.pick_symbol()
 
+    # create function to print game board -- also updates board with new values
+    def print_board(self):
+        board = '''
+         |     |
+     {a}   |  {b}  |  {c}
+    _____|_____|_____
+         |     |
+     {d}   |  {e}  |  {f}
+    _____|_____|_____
+         |     |
+     {g}   |  {h}  |  {i}
+         |     |
+    '''.format(**self.dict)
+        print(board)
 
-    def game_setup(self):
+    # create function to reset all values to begin a game
+    def new_game(self):
+        self.player_obj = []
+        player1.player = ''
+        player2.player = ''
+        player1.symbol = ''
+        player2.symbol = ''
         self.play_order()
-        # board input legend
-        print(board_key)
-        # starting blank board
-        print('''
+        self.dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
+        self.dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
+        player1.moves = []
+        player2.moves = []
+
+    # create function to setup game -- only used for first game
+#     def game_setup(self):
+#         self.new_game()
+#         print(board_key)
+#         print('''
+# *************************************************
+# Let\'s start playing!
+# *************************************************''')
+#         self.print_board()
+
+    def end_game(self):
+        if player1.total > player2.total:
+            print('''With a score of {score}
+    **********
+    {player} Wins!
+    **********'''.format(score = player1.total, player = player1.name))
+        elif player1.total < player2.total:
+            print('''With a score of {score}
+    **********
+    {player} Wins!
+    **********'''.format(score = player2.total, player = player2.name))
+        else:
+            print('''With a score of {score1} to {score2}
+    **********
+    It\'s a Tie!
+    **********'''.format(score1 = player1.total, score2 = player2.total))
+
+        print('\nThanks for playing!\n')
+
+    def start_game(self):
+        if player1.total == 0 and player2.total == 0:
+            self.new_game()
+            print(board_key)
+            print('''
 *************************************************
 Let\'s start playing!
 *************************************************''')
-        print_board()
+        else:
+            print('''
+*************************************************
+Let\'s play another game!
+*************************************************
+''')
+            self.new_game()
+        self.print_board()
+        game.play_game()
 
+    # create function to play the game
     def play_game(self):
+        # players make moves until someone wins or the game ends in a tie
         i = 0
         while i < 9:
             for player in self.player_obj:
                 player.make_move()
+                self.print_board()
                 player.check_win()
                 if player.check_win() == True:
                     i = 9
                     player.total += 1
-                    print('\n{player}, you have won the round!\n'.format(player = player.name))
+                    print('\n{player}, you have won the game!\n'.format(player = player.name))
                     break
                 elif i == 8:
-                    print('It looks like a tie.')
+                    print('It looks like a tie.\n')
                     i = 9
                     break
                 i += 1
+        # prints games scores -- how many games each player has one
+        print('''Score:
+        {player1}: {score1}
+        {player2}: {score2}
+        '''.format(player1 = player1.name, score1 = player1.total, player2 = player2.name, score2 = player2.total))
+        # ask if another game wants to be played -- if yes, start new game with blank boards--totals continue
+        choice = input("{player1} and {player2}, would you like to play another game? ".format(player1 = player1.name, player2 = player2.name))
+        choice = self.check_yes_no(choice).lower()
 
-        print('{player}: {score}'.format(player = player1.name, score = player1.total))
-        print('{player}: {score}'.format(player = player2.name, score = player2.total))
+        if choice == 'n' or choice == 'no': #--maybe use start_game and end_game---------------------------------------
+            # -----here----- want to add function at end to determine overall winner
+            # print('Thanks for playing!')
+            print('')
+            self.end_game()
+        elif choice == 'y' or choice == 'yes':
+            self.start_game()
 
 
+    def check_yes_no(self, choice):
+        check = choice.lower() in allow_yes_no
+        while check == False:
+            choice = input('That is not a valid response. Please try again: ')
+            check = choice.lower() in allow_yes_no
+        return choice
 
 
 
@@ -233,14 +290,12 @@ player2 = Player(create_player(2))
 
 
 
-# --Testing--
-# playing with and testing current code to test functionality
-
-
-
-
+# --Play game--
+# create
 game = Game()
 
 
-game.game_setup()
-game.play_game()
+# game.game_setup()
+# game.play_game()
+
+game.start_game()
