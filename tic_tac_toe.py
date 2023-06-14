@@ -195,16 +195,21 @@ Let\'s start playing!
 
     def play_game(self):
         i = 0
-        while i <= 8:
+        while i < 9:
             for player in self.player_obj:
                 player.make_move()
                 player.check_win()
-                if player.check_win() == True or i == 8:
+                if player.check_win() == True:
                     i = 9
                     player.total += 1
                     print('\n{player}, you have won the round!\n'.format(player = player.name))
                     break
+                elif i == 8:
+                    print('It looks like a tie.')
+                    i = 9
+                    break
                 i += 1
+
         print('{player}: {score}'.format(player = player1.name, score = player1.total))
         print('{player}: {score}'.format(player = player2.name, score = player2.total))
 
