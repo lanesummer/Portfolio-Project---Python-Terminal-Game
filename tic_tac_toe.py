@@ -4,6 +4,7 @@
 import random
 from tic_tac_toe_title import title
 
+
 # --Title and Welcome--
 # print title of game, create and print welcome message
 print(title)
@@ -64,7 +65,6 @@ def create_player(num):
 # --Classes--
 # create class --Player--
 class Player():
-
     def __init__(self, name):
         self.name = name
         self.player = ''
@@ -108,6 +108,7 @@ class Player():
             i += 1
         return False
 
+    # create funtion to check input X/O
     def check_x_o(self, choice):
         check = choice.lower() in allow_x_o
         while check == False:
@@ -115,6 +116,7 @@ class Player():
             check = choice.lower() in allow_x_o
         return choice
 
+    # create funtion to check input is allowed number
     def check_num(self, choice):
         check = choice in str(allow_num)
         while check == False:
@@ -125,7 +127,6 @@ class Player():
 
 # create class --Game--
 class Game():
-
     def __init__(self):
         self.players = player1.name, player2.name
         self.player_obj = []
@@ -181,17 +182,8 @@ class Game():
         player1.moves = []
         player2.moves = []
 
-    # create function to setup game -- only used for first game
-#     def game_setup(self):
-#         self.new_game()
-#         print(board_key)
-#         print('''
-# *************************************************
-# Let\'s start playing!
-# *************************************************''')
-#         self.print_board()
-
     def end_game(self):
+        # ends game - determines overall winner
         if player1.total > player2.total:
             print('''With a score of {score}
     **********
@@ -207,7 +199,6 @@ class Game():
     **********
     It\'s a Tie!
     **********'''.format(score1 = player1.total, score2 = player2.total))
-
         print('\nThanks for playing!\n')
 
     def start_game(self):
@@ -255,16 +246,13 @@ Let\'s play another game!
         # ask if another game wants to be played -- if yes, start new game with blank boards--totals continue
         choice = input("{player1} and {player2}, would you like to play another game? ".format(player1 = player1.name, player2 = player2.name))
         choice = self.check_yes_no(choice).lower()
-
-        if choice == 'n' or choice == 'no': #--maybe use start_game and end_game---------------------------------------
-            # -----here----- want to add function at end to determine overall winner
-            # print('Thanks for playing!')
+        if choice == 'n' or choice == 'no':
             print('')
             self.end_game()
         elif choice == 'y' or choice == 'yes':
             self.start_game()
 
-
+    # create funtion to check input yes/no
     def check_yes_no(self, choice):
         check = choice.lower() in allow_yes_no
         while check == False:
@@ -273,29 +261,13 @@ Let\'s play another game!
         return choice
 
 
-
-
-
-
-
-
-
 # --Players--
 # create players
 player1 = Player(create_player(1))
 player2 = Player(create_player(2))
 
 
-
-
-
-
 # --Play game--
-# create
+# create game and play it
 game = Game()
-
-
-# game.game_setup()
-# game.play_game()
-
 game.start_game()
