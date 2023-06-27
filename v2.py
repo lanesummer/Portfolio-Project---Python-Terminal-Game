@@ -23,9 +23,14 @@ print(welcome)
 dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
 dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
 # input dict converts the space number to its corresponding place in dict
-input_dict = {1:'a', 2:'b', 3:'c', 4:'d', 5:'e', 6:'f', 7:'g', 8:'h', 9:'i'}
+input_dict = {2:'b', 3:'c', 4:'d', 5:'e', 6:'f', 7:'g', 8:'h', 9:'i'}
+
+print(input_dict)
+# input_dict += {1:'x'}
+input_dict[1] = 'x'
+print(input_dict)
 # allow variables are used to compare -- these are the allowed values the input will be checked against
-allow_num = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# allow_num = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 allow_yes_no = ['yes', 'y', 'no', 'n']
 allow_x_o = ['x', 'o']
 # combos for winning
@@ -62,6 +67,10 @@ def create_player(num):
     return name
 
 
+played_moves = {'1':' ', '2':' ', '3':' ', '4':' ', '5':' ', '6':' ', '7':' ', '8':' ', '9':' '}
+num_played = []
+
+
 # --Classes--
 # create class --Player--
 class Player():
@@ -73,15 +82,63 @@ class Player():
         self.total = 0
 
     def make_move(self):
+        num_options = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        # move_check = played_moves.copy()
         choice = input('{player}, pick a number: '.format(player = self.name))
-        choice = int(self.check_num(choice))
-        while (game.dict_num[choice] == ' ') != True:
-            choice = input('That space has already been played. Please try again: ')
-            choice = int(self.check_num(choice))
-        game.dict_num[choice] = self.symbol
-        key = input_dict[choice]
-        self.moves.append(key)
-        game.dict[key] = self.symbol
+        # while int(choice) not in num_options:
+        #     choice = input('That is not a valid response. Please try again: ')
+        # choice = int(self.check_num(choice))
+        # while (game.dict_num[choice] == ' ') != True:
+        print('Played moves: ')
+        print(played_moves)
+        print('----------------------')
+        # print('Move check: ')
+        # print(move_check)
+        # print('----------------------')
+        #----------------------------------------------------------------------------
+        #-------------------------HERE------------------------------------------------
+        #-----------------trying to get it to check right and still unpack the tuple correctly
+        # for key, value in move_check.items():
+        # while not choice:
+        #     if int(choice) not in num_options:
+        #         choice = input('That is not a valid response. Please try again: ')
+        #         return False
+        #     if choice in num_played:
+        #         choice = input('That space has already been played. Please try again: ')
+        #         return False
+        #     return True
+
+        while int(choice) not in num_options or choice in num_played:
+            if choice in num_played:
+                choice = input('That space has already been played. Please try again: ')
+            else:
+                choice = input('That is not a valid response. Please try again: ')
+            # print(choice in num_played)
+            # while choice in num_played:
+                # choice = input('That space has already been played. Please try again: ')
+
+
+        num_played.append(choice)
+        print(num_played)
+        # while choice in move_check.items():
+        #     # for value in move_check.values():
+        #     if value in move_check.values() != ' ':
+        #         choice = input('That space has already been played. Please try again: ')
+            # choice = int(self.check_num(choice))
+        # move.setdefault(self.symbol, choice)
+        # print('Played')
+        # print(self.symbol)
+        played_moves[choice] = self.symbol
+        self.moves.append(choice)
+        # played_moves.pop([int(choice)-1])
+        # played_moves.update(move)
+        print(played_moves)
+        print(self.moves)
+
+        # game.dict_num[choice] = self.symbol
+        # key = input_dict[choice]
+        # self.moves.append(key)
+        # game.dict[key] = self.symbol
 
     def pick_symbol(self):
         choice = input("{player}, would you like to be 'X' or 'O'? ".format(player = self.name))
@@ -155,18 +212,46 @@ class Game():
             player1.pick_symbol()
 
     # create function to print game board -- also updates board with new values
+    # def print_board(self):
+    #     board = '''
+    #      |     |
+    #  {a}   |  {b}  |  {c}
+    # _____|_____|_____
+    #      |     |
+    #  {d}   |  {e}  |  {f}
+    # _____|_____|_____
+    #      |     |
+    #  {g}   |  {h}  |  {i}
+    #      |     |
+    # '''.format(**self.dict)
+    #     print(board)
+
+    # def print_board(self):
+    #     board = '''
+    #      |     |
+    #  {1}   |  {2}  |  {3}
+    # _____|_____|_____
+    #      |     |
+    #  {4}   |  {5}  |  {6}
+    # _____|_____|_____
+    #      |     |
+    #  {7}   |  {8}  |  {9}
+    #      |     |
+    # '''.format(played_moves.keys())
+    #     print(board)
+
     def print_board(self):
         board = '''
          |     |
-     {a}   |  {b}  |  {c}
+     {0}   |  {1}  |  {2}
     _____|_____|_____
          |     |
-     {d}   |  {e}  |  {f}
+     {3}   |  {4}  |  {5}
     _____|_____|_____
          |     |
-     {g}   |  {h}  |  {i}
+     {6}   |  {7}  |  {8}
          |     |
-    '''.format(**self.dict)
+    '''.format(*played_moves.values())
         print(board)
 
     # create function to reset all values to begin a game
