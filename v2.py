@@ -75,14 +75,15 @@ class Player():
     def pick_symbol(self):
         choice = input("{player}, would you like to be 'X' or 'O'? ".format(player = self.name))
         self.symbol = self.check_x_o(choice).upper()
-        if player1.symbol == 'X':
-            player2.symbol = 'O'
-        elif player1. symbol == 'O':
-            player2.symbol = 'X'
-        elif player2.symbol == 'X':
-            player1.symbol = 'O'
-        elif player2.symbol == 'O':
-            player1.symbol = 'X'
+
+        # if player1.symbol == 'X':
+        #     player2.symbol = 'O'
+        # elif player1. symbol == 'O':
+        #     player2.symbol = 'X'
+        # elif player2.symbol == 'X':
+        #     player1.symbol = 'O'
+        # elif player2.symbol == 'O':
+        #     player1.symbol = 'X'
         return self.symbol
 
     def check_win(self):
@@ -147,22 +148,20 @@ class Game():
         pass
 
     def play_order(self):
-        # if player1.total == 0 and player2.total == 0:
         if self.first_game:
             player1.player = random.randint(1,2)
         else:
-            print('Player 1 is currently: ' + str(player1.player)) #--------can delete later-------------
+            # print('Player 1 is currently: ' + str(player1.player)) #--------can delete later-------------
             if player1.player == 4:
                 player1.player = 2
             else:
                 player1.player = 1
-        print('Player 1 is player: ' + str(player1.player) + '\n') #--------can delete later-------------
+        # print('Player 1 is player: ' + str(player1.player) + '\n') #--------can delete later-------------
         if player1.player == 1:
             self.start_player = player1
             player2.player = 2
             self.last_player = player2
         else:
-            # player1.player = 2
             self.last_player = player1
             player2.player = 1
             self.start_player = player2
@@ -173,45 +172,15 @@ class Game():
             print('{player}, you lost the last game so you will go first.\n'.format(player = self.start_player.name))
 
         self.last_player.pick_symbol()
+        if self.last_player.symbol == 'X':
+            self.start_player.symbol = 'O'
+        else:
+            self.start_player.symbol = 'X'
 
         self.player_obj.append(self.start_player)
         self.player_obj.append(self.last_player)
 
-        #     self.player_obj.append(player2) #---comment again-----------
 
-
-        #     self.player_obj.append(player1) #---comment again-----------
-        #     print('{player}, you have been randomly selected to go first.\n'.format(player = player2.name))
-        #     player1.pick_symbol()
-
-        # if self.players.player == 1:
-        #     self.start_player = self.players
-        # self.start_player = self.players.player == 1
-        # print(self.start_player)
-
-
-
-
-
-        # if player1.player == 1:
-        #     # player1.player = 1 #---defined but not used in old code-----
-        #     self.start_player = player1 #---defined but not used in old code-----
-        #     self.player_obj.append(player1) #---comment again-----------
-        #     player2.player = 2 #---defined but not used in old code-----
-        #     self.player_obj.append(player2) #---comment again-----------
-        #     if self.first_game:
-        #         print('{player}, you have been randomly selected to go first.\n'.format(player = player.name for player.player == 1))
-        #     else:
-        #         print('{player}, you lost the last game so you will go first.\n'.format(player = player1.name))
-        #     player2.pick_symbol()
-        # else:
-        #     # player1.player = 2
-        #     self.start_player = player2
-        #     self.player_obj.append(player2) #---comment again-----------
-        #     player2.player = 1
-        #     self.player_obj.append(player1) #---comment again-----------
-        #     print('{player}, you have been randomly selected to go first.\n'.format(player = player2.name))
-        #     player1.pick_symbol()
 
 
 
@@ -254,14 +223,16 @@ class Game():
         self.player_obj = []
         # player1.player = ''
         # player2.player = ''
-        player1.symbol = ''
-        player2.symbol = ''
+        # player1.symbol = ''
+        # player2.symbol = ''
+
         self.play_order()
+
         # self.dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
         # self.dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
         played_moves.update({'1':' ', '2':' ', '3':' ', '4':' ', '5':' ', '6':' ', '7':' ', '8':' ', '9':' '})
         num_played.clear()
-        print(num_played)
+        # print(num_played) #--------can delete later-------------
         player1.moves = []
         player2.moves = []
 
