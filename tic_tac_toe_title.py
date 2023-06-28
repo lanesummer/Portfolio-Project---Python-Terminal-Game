@@ -1,4 +1,4 @@
-# tic-tac-toe game title
+# tic-tac-toe game title and welcome
 
 # create block letters to create the title
 tic_tac = '''
@@ -23,3 +23,29 @@ title_line = '''
 *************************************************
 '''
 title = title_line + tic_tac + toe + title_line
+
+# create welcome message
+welcome = '''             Welcome to Tic-Tac-Toe!
+
+*************************************************
+
+Before the game can begin, I need to know who will be playing
+'''
+
+# input legend to show what numbers are used to make a move in a specific square
+board_key = '''
+*************************************************
+Input Legend:
+*************************************************
+Use the cooresponding number below when making your move
+
+     |     |
+  1  |  2  |  3
+_____|_____|_____
+     |     |
+  4  |  5  |  6
+_____|_____|_____
+     |     |
+  7  |  8  |  9
+     |     |
+'''
