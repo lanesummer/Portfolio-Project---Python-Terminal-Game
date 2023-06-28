@@ -65,6 +65,7 @@ Let\'s play another game!
 
 # game message -- end overall tie
 tie_message = '''
+
 With a score of {score1} to {score2}...
 
 **********
@@ -72,8 +73,9 @@ It\'s a Tie!
 **********
 '''
 
-# game message -- end overall 
+# game message -- end overall
 win_message = '''
+
 With a score of {score}...
 
 **********

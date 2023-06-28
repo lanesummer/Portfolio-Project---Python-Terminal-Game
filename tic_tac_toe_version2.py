@@ -23,8 +23,7 @@ player2_total = 0
 # create function to create a player -- using player input
 def create_player(num):
     name = input('''Player {num}:
-    -What is your name? '''.format(num = num))
-    name = name.title()
+    -What is your name? '''.format(num = num)).title()
     print('\nNice to meet you {name}\n'.format(name = name))
     return name
 
@@ -55,11 +54,11 @@ class Player():
 
     # create function to have player going 2nd pick if they want X or O
     def pick_symbol(self):
-        choice = input("{player}, would you like to be 'X' or 'O'? ".format(player = self.name))
+        choice = input("{player}, would you like to be 'X' or 'O'? ".format(player = self.name)).upper()
         # check whether choice is valid
-        while not choice.lower() in ['x', 'o']:
-            choice = input('That is not a valid response. Please try again: ')
-        self.symbol = choice.upper()
+        while not choice in ['X', 'O']:
+            choice = input('That is not a valid response. Please try again: ').upper()
+        self.symbol = choice
         return self.symbol
 
     # create function to check if player has a winning combo (won the game)
@@ -159,12 +158,10 @@ class Game():
                 print('\n{player}, you have won the game!\n'.format(player = player.name))
                 player.player = 4
                 self.random_order = False
-                break
             elif i == 8:
                 print('It looks like a tie.\n')
                 i = 9
                 self.random_order = True
-                break
             i += 1
 
         # game ended -- then prints games scores -- how many games each player has one overall
@@ -174,13 +171,12 @@ class Game():
         '''.format(player1 = player1.name, score1 = player1.total, player2 = player2.name, score2 = player2.total))
 
         # ask if another game wants to be played -- if yes, start new game with blank boards--totals continue
-        choice = input("{player1} and {player2}, would you like to play another game? ".format(player1 = player1.name, player2 = player2.name))
-        while choice.lower() not in ['yes', 'y', 'no', 'n']:
-            choice = input('That is not a valid response. Please try again: ')
-        if choice == 'n' or choice == 'no':
-            print('')
+        choice = input("{player1} and {player2}, would you like to play another game? ".format(player1 = player1.name, player2 = player2.name)).lower()
+        while choice not in ['yes', 'y', 'no', 'n']:
+            choice = input('That is not a valid response. Please try again: ').lower()
+        if choice in ('n', 'no'): #'n' or choice == 'no':
             self.end_game()
-        elif choice == 'y' or choice == 'yes':
+        elif choice in ('y', 'yes'):
             self.start_game()
 
 # --Players-----------------------------------------------------------------------------------------------------
