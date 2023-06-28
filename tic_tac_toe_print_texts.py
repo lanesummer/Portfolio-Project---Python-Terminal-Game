@@ -49,3 +49,34 @@ _____|_____|_____
   7  |  8  |  9
      |     |
 '''
+
+# start game message new game
+start_message_new = '''
+*************************************************
+Let\'s start playing!
+*************************************************'''
+
+# start game message more games
+start_message_more = '''
+*************************************************
+Let\'s play another game!
+*************************************************
+'''
+
+# game message -- end overall tie
+tie_message = '''
+With a score of {score1} to {score2}...
+
+**********
+It\'s a Tie!
+**********
+'''
+
+# game message -- end overall 
+win_message = '''
+With a score of {score}...
+
+**********
+{player} Wins!
+**********
+'''
