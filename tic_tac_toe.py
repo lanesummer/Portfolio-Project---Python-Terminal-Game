@@ -2,7 +2,7 @@
 
 # --Imports--
 import random
-from tic_tac_toe_title import title
+from tic_tac_toe_print_texts import title
 
 
 # --Title and Welcome--
