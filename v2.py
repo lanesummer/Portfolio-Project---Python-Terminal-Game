@@ -50,12 +50,7 @@ class Player():
         self.total = 0
 
     def make_move(self):
-        # # array that is used to check if choice is a number 1-9 #--------can delete later-------------
-        # num_options = [1, 2, 3, 4, 5, 6, 7, 8, 9] #--------can delete later-------------
         choice = input('{player}, pick a number: '.format(player = self.name))
-        print('Played moves: ') #--------can delete later-------------
-        print(played_moves) #--------can delete later-------------
-        print('----------------------') #--------can delete later-------------
         # check whether choice is valid--is a num 1-9 and is a spot that hasn't already been played
         while int(choice) not in range(1,10) or choice in num_played:
             if choice in num_played:
@@ -64,11 +59,10 @@ class Player():
                 choice = input('That is not a valid response. Please try again: ')
         # add move to num_played array--array that is used to check if spot has already been played
         num_played.append(choice)
-        print(num_played) #--------can delete later-------------
         played_moves[choice] = self.symbol
         self.moves.append(choice)
-        print(played_moves) #--------can delete later-------------
-        print(self.moves) #--------can delete later-------------
+        game.print_board()
+
 
 
 
@@ -87,16 +81,14 @@ class Player():
         return self.symbol
 
     def check_win(self):
-        i = 0
-        while i < 8:
+        for combo in win_combo:
             x = 0
             for move in self.moves:
-                if move in win_combo[i]:
+                if move in combo:
                     x += 1
-                    if x == 3:
-                        return True
-            i += 1
+                    if x == 3: return True
         return False
+
 
     # create funtion to check input X/O
     def check_x_o(self, choice):
@@ -106,89 +98,39 @@ class Player():
             check = choice.lower() in allow_x_o
         return choice
 
-    # # create funtion to check input is allowed number #--------can delete later-------------
-    # def check_num(self, choice): #--------can delete later-------------
-    #     check = choice in str(allow_num) #--------can delete later-------------
-    #     while check == False: #--------can delete later-------------
-    #         choice = input('That is not a valid response. Please try again: ') #--------can delete later-------------
-    #         check = choice in str(allow_num) #--------can delete later-------------
-    #     return choice #--------can delete later-------------
-
 
 # create class --Game-------------------------------------------------------------------------------------------
 class Game():
     def __init__(self):
         self.players = player1.name, player2.name
-        self.player_obj = []
+        # self.player_obj = [] #--------can delete later-------------
         self.start_player = ''
         self.last_player = ''
-        self.first_game = True
+        self.random_order = True
         # self.dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
         # self.dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
 
     # create a function to determine random play order and allow player going 2nd to pick their symbol
-    def play_order_old(self):
-    #     order = random.randint(1,2)
-    #     if order == 1:
-    #         player1.player = 1
-    #         self.start_player = player1
-    #         self.player_obj.append(player1)
-    #         player2.player = 2
-    #         self.player_obj.append(player2)
-    #         print('{player}, you have been randomly selected to go first.\n'.format(player = player1.name))
-    #         player2.pick_symbol()
-    #     else:
-    #         player1.player = 2
-    #         self.start_player = player2
-    #         self.player_obj.append(player2)
-    #         player2.player = 1
-    #         self.player_obj.append(player1)
-    #         print('{player}, you have been randomly selected to go first.\n'.format(player = player2.name))
-    #         player1.pick_symbol()
-        pass
-
     def play_order(self):
-        if self.first_game:
+        # if first game or last game tie--random select player to go first
+        if self.random_order:
             player1.player = random.randint(1,2)
+        # player who lost last game goes first
         else:
-            # print('Player 1 is currently: ' + str(player1.player)) #--------can delete later-------------
-            if player1.player == 4:
-                player1.player = 2
-            else:
-                player1.player = 1
-        # print('Player 1 is player: ' + str(player1.player) + '\n') #--------can delete later-------------
+            player1.player = 2 if player1.player == 4 else 1
+        # assign player numbers (1 or 2), start player and last player
         if player1.player == 1:
-            self.start_player = player1
-            player2.player = 2
-            self.last_player = player2
+            self.start_player = player1; player2.player = 2; self.last_player = player2
         else:
-            self.last_player = player1
-            player2.player = 1
-            self.start_player = player2
-
-        if self.first_game:
+            self.last_player = player1; player2.player = 1; self.start_player = player2
+        # print statement with which player goes first
+        if self.random_order:
             print('{player}, you have been randomly selected to go first.\n'.format(player = self.start_player.name))
         else:
             print('{player}, you lost the last game so you will go first.\n'.format(player = self.start_player.name))
-
+        # player not going first gets to pick their symbol (X or O), set symbol for other player
         self.last_player.pick_symbol()
-        if self.last_player.symbol == 'X':
-            self.start_player.symbol = 'O'
-        else:
-            self.start_player.symbol = 'X'
-
-        self.player_obj.append(self.start_player)
-        self.player_obj.append(self.last_player)
-
-
-
-
-
-
-
-
-
-
+        self.start_player.symbol = 'O' if self.last_player.symbol == 'X' else 'X'
 
     # create function to print game board -- also updates board with new values after a move is made
     def print_board(self):
@@ -220,19 +162,9 @@ class Game():
         pass
 
     def new_game(self):
-        self.player_obj = []
-        # player1.player = ''
-        # player2.player = ''
-        # player1.symbol = ''
-        # player2.symbol = ''
-
         self.play_order()
-
-        # self.dict = {'a':' ', 'b':' ', 'c':' ', 'd':' ', 'e':' ', 'f':' ', 'g':' ', 'h':' ', 'i':' '}
-        # self.dict_num = {1:' ', 2:' ', 3:' ', 4:' ', 5:' ', 6:' ', 7:' ', 8:' ', 9:' '}
         played_moves.update({'1':' ', '2':' ', '3':' ', '4':' ', '5':' ', '6':' ', '7':' ', '8':' ', '9':' '})
         num_played.clear()
-        # print(num_played) #--------can delete later-------------
         player1.moves = []
         player2.moves = []
 
@@ -276,25 +208,49 @@ Let\'s play another game!
     # create function to play the game
     def play_game(self):
         # players make moves until someone wins or the game ends in a tie
+
         i = 0
         while i < 9:
-            for player in self.player_obj: #---comment again-----------
-            # for player in player: ## ---uncomment ---------------
-                player.make_move()
-                self.print_board()
-                player.check_win()
-                if player.check_win() == True:
-                    i = 9
-                    player.total += 1
-                    print('\n{player}, you have won the game!\n'.format(player = player.name))
-                    player.player = 4
-                    break
-                elif i == 8:
-                    print('It looks like a tie.\n')
-                    i = 9
-                    break
-                i += 1
-        self.first_game = False
+            player = self.start_player if i % 2 == 0 else self.last_player
+            player.make_move()
+            if player.check_win() == True:
+                i = 9
+                player.total += 1
+                print('\n{player}, you have won the game!\n'.format(player = player.name))
+                player.player = 4
+                self.random_order = False
+                break
+            elif i == 8:
+                print('It looks like a tie.\n')
+                i = 9
+                self.random_order = True
+                break
+            i += 1
+
+
+
+        # i = 0
+        # while i < 9:
+        #     for player in self.player_obj: #---comment again-----------
+        #     # for player in player: ## ---uncomment ---------------
+        #         player.make_move()
+        #         self.print_board()
+        #         player.check_win()
+        #         if player.check_win() == True:
+        #             i = 9
+        #             player.total += 1
+        #             print('\n{player}, you have won the game!\n'.format(player = player.name))
+        #             player.player = 4
+        #             break
+        #         elif i == 8:
+        #             print('It looks like a tie.\n')
+        #             i = 9
+        #             break
+        #         i += 1
+        # self.first_game = False
+
+
+
         # prints games scores -- how many games each player has one
         print('''Score:
         {player1}: {score1}
