@@ -11,7 +11,7 @@ Who will be the Tic-Tac-Toe champion?
 # 
 * tic_tac_toe.py was my first attempt at this project.
 * I decided to go back and look at ways to improve/refactor the code and change some of the functionality
-* v2.py is the updated version
+* tic_tac_toe_version2.py is the updated version
 * In addition to making the code more readable, a big change in the updated version is the method for determining who goes first.
   In the previous version, each new game the player going first was picked randomly. In the new version, if it is the first game,
   or the previous game ended in a tie, the player going first is picked randomly. Otherwise, the player who lost the previous game
