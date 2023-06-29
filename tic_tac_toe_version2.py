@@ -13,7 +13,7 @@ print(welcome)
 # create variables to track moves made in a game
 played_moves = {'1':' ', '2':' ', '3':' ', '4':' ', '5':' ', '6':' ', '7':' ', '8':' ', '9':' '}
 num_played = []
-# combos for winning
+# combos for winning (across each row, down each column, and the diagonal)
 win_combo = [['1','2','3'], ['4','5','6'], ['7','8','9'], ['1','4','7'], ['2','5','8'], ['3','6','9'], ['1','5','9'], ['3','5','7']]
 # create variables to keep track of player scores for all games played
 player1_total = 0
@@ -39,11 +39,18 @@ class Player():
 
     # create function to take input from player, check and store it to make a move
     def make_move(self):
+        count = 1
         choice = input('{player}, pick a number: '.format(player = self.name))
         # check whether choice is valid--is an integer 1-9 and is a spot that hasn't already been played
         while not choice.isdigit() or int(choice) not in range(1,10) or choice in num_played:
             if choice in num_played:
+                # print('That space has already been played. ')
                 choice = input('That space has already been played. Please try again: ')
+                count += 1
+                if count >= 4 and count % 2 == 0:
+                    self.need_board_key()
+                    choice = input('Please pick a number: ')
+                # choice = input('That space has already been played. Please try again: ')
             else:
                 choice = input('That is not a valid response. Please try again: ')
         # add move to num_played array--array that is used to check if spot has already been played
@@ -52,14 +59,23 @@ class Player():
         self.moves.append(choice)
         game.print_board()
 
+    # create function to ask player if they need to see the board key again (used after 4 failed attempts to put move in a space that is already taken)
+    def need_board_key(self):
+        see_board_key = input('That space has already been played. Would you like to see the board key? '.format(player = self.player)).lower()
+        while not see_board_key in ['yes', 'y', 'no', 'n']:
+            see_board_key = input('That is not a valid response. Would you like to see the board key? ').lower()
+        if see_board_key in ['y', 'yes']:
+            print(board_key)
+        # return input('\n{player}, pick a number: '.format(player = self.name))
+        return
+
     # create function to have player going 2nd pick if they want X or O
     def pick_symbol(self):
         choice = input("{player}, would you like to be 'X' or 'O'? ".format(player = self.name)).upper()
         # check whether choice is valid
         while not choice in ['X', 'O']:
             choice = input('That is not a valid response. Please try again: ').upper()
-        self.symbol = choice
-        return self.symbol
+        return choice
 
     # create function to check if player has a winning combo (won the game)
     def check_win(self):
@@ -98,7 +114,7 @@ class Game():
         else:
             print('{player}, you lost the last game so you will go first.\n'.format(player = self.start_player.name))
         # player not going first gets to pick their symbol (X or O), set symbol for other player
-        self.last_player.pick_symbol()
+        self.last_player.symbol = self.last_player.pick_symbol()
         self.start_player.symbol = 'O' if self.last_player.symbol == 'X' else 'X'
 
     # create function to print game board -- also updates board with new values after a move is made
@@ -137,7 +153,7 @@ class Game():
     def start_game(self):
         if player1.total == 0 and player2.total == 0:
             self.new_game()
-            print(board_key)
+            print(board_key_full)
             print(start_message_new)
         else:
             print(start_message_more)

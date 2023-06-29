@@ -33,11 +33,24 @@ Before the game can begin, I need to know who will be playing
 '''
 
 # input legend to show what numbers are used to make a move in a specific square
-board_key = '''
+board_key_full = '''
 *************************************************
 Input Legend:
 *************************************************
 Use the cooresponding number below when making your move
+
+     |     |
+  1  |  2  |  3
+_____|_____|_____
+     |     |
+  4  |  5  |  6
+_____|_____|_____
+     |     |
+  7  |  8  |  9
+     |     |
+'''
+
+board_key = '''
 
      |     |
   1  |  2  |  3
