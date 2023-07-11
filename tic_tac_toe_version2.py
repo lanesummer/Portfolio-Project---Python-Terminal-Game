@@ -3,6 +3,8 @@
 # --Imports----------------------------------------------------------------------------------------------------
 import random
 from tic_tac_toe_print_texts import *
+import os
+import subprocess
 
 # --Title and Welcome------------------------------------------------------------------------------------------
 # print title of game, create and print welcome message
@@ -44,13 +46,7 @@ class Player():
         # check whether choice is valid--is an integer 1-9 and is a spot that hasn't already been played
         while not choice.isdigit() or int(choice) not in range(1,10) or choice in num_played:
             if choice in num_played:
-                # print('That space has already been played. ')
                 choice = input('That space has already been played. Please try again: ')
-                count += 1
-                if count >= 4 and count % 2 == 0:
-                    self.need_board_key()
-                    choice = input('Please pick a number: ')
-                # choice = input('That space has already been played. Please try again: ')
             else:
                 choice = input('That is not a valid response. Please try again: ')
         # add move to num_played array--array that is used to check if spot has already been played
@@ -58,16 +54,6 @@ class Player():
         played_moves[choice] = self.symbol
         self.moves.append(choice)
         game.print_board()
-
-    # create function to ask player if they need to see the board key again (used after 4 failed attempts to put move in a space that is already taken)
-    def need_board_key(self):
-        see_board_key = input('That space has already been played. Would you like to see the board key? '.format(player = self.player)).lower()
-        while not see_board_key in ['yes', 'y', 'no', 'n']:
-            see_board_key = input('That is not a valid response. Would you like to see the board key? ').lower()
-        if see_board_key in ['y', 'yes']:
-            print(board_key)
-        # return input('\n{player}, pick a number: '.format(player = self.name))
-        return
 
     # create function to have player going 2nd pick if they want X or O
     def pick_symbol(self):
@@ -110,15 +96,27 @@ class Game():
             self.last_player = player1; player2.player = 1; self.start_player = player2
         # print statement with which player goes first
         if self.random_order:
-            print('{player}, you have been randomly selected to go first.\n'.format(player = self.start_player.name))
+            print('\n{player}, you have been randomly selected to go first.\n\n'.format(player = self.start_player.name))
         else:
-            print('{player}, you lost the last game so you will go first.\n'.format(player = self.start_player.name))
+            print('\n\n{player}, you lost the last game so you will go first.\n'.format(player = self.start_player.name))
         # player not going first gets to pick their symbol (X or O), set symbol for other player
         self.last_player.symbol = self.last_player.pick_symbol()
         self.start_player.symbol = 'O' if self.last_player.symbol == 'X' else 'X'
 
     # create function to print game board -- also updates board with new values after a move is made
     def print_board(self):
+        try:
+            subprocess.call('clear')
+        except:
+            os.system('cls')
+
+        print(title)
+        if not player1.moves and not player2.moves:
+            print('{0} you will be {1}\n\n{2} you will be {3}\n'.format(player1.name, player1.symbol, player2.name, player2.symbol))
+            print(board_key_full)
+        else:
+            print(board_key)
+
         board = '''
          |     |
      {0}   |  {1}  |  {2}
@@ -129,6 +127,7 @@ class Game():
          |     |
      {6}   |  {7}  |  {8}
          |     |
+
     '''.format(*played_moves.values())
         print(board)
 
@@ -153,12 +152,12 @@ class Game():
     def start_game(self):
         if player1.total == 0 and player2.total == 0:
             self.new_game()
-            print(board_key_full)
+            self.print_board()
             print(start_message_new)
         else:
-            print(start_message_more)
             self.new_game()
-        self.print_board()
+            self.print_board()
+            print(start_message_more)
         game.play_game()
 
     # create function to play the game
